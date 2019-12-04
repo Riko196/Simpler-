@@ -3,6 +3,7 @@
 # production
 /target
 /bin
+/src/main/java/com/grammar/.antlr
 
 # misc
 .env
