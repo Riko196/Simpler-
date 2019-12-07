@@ -1,10 +1,11 @@
 parser grammar SimplerPlusPlusParser;
 
-// export CLASSPATH=".:/usr/local/lib/antlr-4.7.2-complete.jar:$CLASSPATH"
-// antlr4 SimplerPlusPlusLexer.g4
-// antlr4 SimplerPlusPlusParse.g4
-// javac SimplerPlusPlus*.java
-// grun SimplerPlusPlus compilationUnit -gui
+// Run commands:
+// 1. export CLASSPATH=".:/usr/local/lib/antlr-4.7.2-complete.jar:$CLASSPATH"
+// 2. antlr4 SimplerPlusPlusLexer.g4
+// 3. antlr4 SimplerPlusPlusParse.g4
+// 4. javac SimplerPlusPlus*.java
+// 5. grun SimplerPlusPlus compilationUnit -gui
 
 options { tokenVocab=SimplerPlusPlusLexer; }
 
@@ -19,7 +20,8 @@ statement
     | while_loop    #while_loop_label
     | for_loop      #for_loop_label
     | def_function  #def_function_label
-    | init_declaration   #declaration_label
+    | declaration_list   #declaration_label
+    | call_expression  SEMI_COLON  #call_expression_label
     | jump          #jump_label
     ;
 
@@ -28,13 +30,31 @@ block_of_code
     ;
 
 // declaration
+declaration_list
+    : init_declaration (COMMA init_declaration)* SEMI_COLON
+    ;
+
 init_declaration
-    : variable_types? NAME ASSIGN declaration
+    : CONST? variable_types? declaration
     ;
 
 declaration
-    : expression SEMI_COLON
-    | expression QUERT expression COLON expression
+    : NAME ASSIGN value_declaration
+    | NAME (OPEN_BRACKET CLOSE_BRACKET)+ ASSIGN more_dimension_value_declaration
+    | NAME (OPEN_BRACKET expression CLOSE_BRACKET)+ (ASSIGN value_declaration)?
+    ;
+
+value_declaration
+    : expression (QUERT expression COLON expression)?
+    ;
+
+more_dimension_value_declaration
+    : OPEN_BRACE more_dimension_value (COMMA more_dimension_value)* CLOSE_BRACE
+    ;
+
+more_dimension_value
+    : more_dimension_value_declaration
+    | expression
     ;
 
 // Expressions
@@ -87,19 +107,25 @@ unary_expression
     | LOG_NOT unary_expression
     | TILDE unary_expression
     | call_expression
+    | value
     ;
 
 call_expression
-    : call_expression OPEN_BRACKET expression CLOSE_BRACKET
-    | call_expression OPEN_PAREN given_parameters OPEN_PAREN
+    : NAME OPEN_PAREN given_parameters? CLOSE_PAREN
+    | ASSERT expression
     | identifier_expression
     ;
 
 identifier_expression
     : NAME
-    | number
-    | STRING_VALUE+
+    | NAME (OPEN_BRACKET expression CLOSE_BRACKET)+
     | OPEN_PAREN expression CLOSE_PAREN
+    ;
+
+value
+    : number
+    | STRING_VALUE+
+    | NULL
     ;
 
 // if condition
@@ -112,7 +138,7 @@ elif_condition
     ;
 
 else_condition
-    : ELSE expression block_of_code
+    : ELSE block_of_code
     ;
 
 // while loop
@@ -122,7 +148,7 @@ while_loop
 
 // for loop
 for_loop
-    : FOR OPEN_PAREN NAME CLOSE_PAREN IN for_condition block_of_code
+    : FOR NAME IN for_condition block_of_code
     ;
 
 for_condition
@@ -146,7 +172,7 @@ def_parameters
     ;
 
 def_parameter
-    : variable_types NAME
+    : variable_types(OPEN_BRACKET CLOSE_BRACKET)* NAME
     ;
 
 given_parameters

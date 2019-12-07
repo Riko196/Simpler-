@@ -12,14 +12,11 @@ WHILE: 'while';
 FOR: 'for';
 IN: 'in';
 NULL: 'null';
-NEW: 'new';
-DEL: 'del';
 CONTINUE: 'continue';
 BREAK: 'break';
-PRINT: 'print';
-PRINTLN: 'println';
 TRUE: 'True';
 FALSE: 'False';
+CONST: 'const';
 
 // Compared operators
 
@@ -120,12 +117,16 @@ CLOSE_BRACKET: ']';
 
 NAME: ID_START ID_CONTINUE*;
 
-LINE_JOIN: '\\' [ \t]* RN -> channel(HIDDEN);
-// NEWLINE: RN {HandleNewLine();} -> channel(HIDDEN);
-// WS: [ \t]+ {HandleSpaces();} -> channel(HIDDEN);
-COMMENT: '#' ~[\r\n\f]* -> channel(HIDDEN);
-
 // Fragments
+
+fragment ID_CONTINUE:
+	ID_START
+	| [0-9];
+
+fragment ID_START:
+	'_'
+	| [A-Z]
+	| [a-z];
 
 fragment SHORT_STRING:
 	'\'' ('\\' (RN | .) | ~[\\\r\n'])* '\''
@@ -167,40 +168,29 @@ fragment SHORT_BYTES_CHAR_NO_DOUBLE_QUOTE:
 	| [\u0023-\u005B]
 	| [\u005D-\u007F];
 
-/// Any ASCII character except "\"
 fragment LONG_BYTES_CHAR: [\u0000-\u005B] | [\u005D-\u007F];
 
-/// "\" <any ASCII character>
 fragment BYTES_ESCAPE_SEQ: '\\' [\u0000-\u007F];
 
-fragment ID_CONTINUE:
-	ID_START
-	| [0-9];
-
-fragment ID_START:
-	'_'
-	| [A-Z]
-	| [a-z];
-
 // Ignore these characters
-Whitespace
-    :   [ \t]+
+MORE_LINE_COMMENT
+    :   '/*' .*? '*/'
         -> skip
     ;
 
-Newline
+ONE_LINE_COMMENT
+    :   '//' ~[\r\n]*
+        -> skip
+    ;
+
+NEWLINE
     :   (   '\r' '\n'?
         |   '\n'
         )
         -> skip
     ;
 
-BlockComment
-    :   '/*' .*? '*/'
+WHITESPACE
+    :   [ \t]+
         -> skip
-    ;
-
-LineComment
-    :   '//' ~[\r\n]*
-        -> skip
-    ;
+	;
