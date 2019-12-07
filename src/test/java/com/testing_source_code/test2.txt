@@ -1,0 +1,37 @@
+def swap(string[] pole, int a, int b) -> void {
+    string pomoc <- pole[a];
+    pole[a] <- pole[b];
+    pole[b] <- pomoc;
+}
+
+def partition(string[] pole, int low, int high) -> int {
+    int i <- low - 1;
+    int pivot <- pole[high];
+    for j in (low , high, 1) {
+        if (pole[j] <= pivot) {
+            i <- (i+1);
+            swap(pole, i, j);
+        }
+    }
+    swap(pole, i + 1, high);
+    return i + 1;
+}
+
+def quickSort(string[] pole, int low, int high) -> void {
+    if (low < high) {
+        int pi <- partition(pole, low, high);
+        quickSort(pole, low, pi-1);
+        quickSort(pole, pi+1, high);
+    }
+}
+
+int N <- input();
+string pole[N];
+
+for i in (0, N, 1) {
+    pole[i] <- input();
+}
+
+for i in (0, N, 1) {
+    println(pole[i]);
+}

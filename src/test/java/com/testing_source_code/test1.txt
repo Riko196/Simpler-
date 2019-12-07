@@ -1,0 +1,9 @@
+int N <- input();
+int pole[N];
+int maximum <- 0; // predpokladame, ze N je aspon 1
+for i in (1, N, 1) {
+    if (pole[maximum] < pole[i]) {
+        maximum <- i;
+    }
+}
+println(pole[maximum]);
