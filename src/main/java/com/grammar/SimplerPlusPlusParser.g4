@@ -1,12 +1,5 @@
 parser grammar SimplerPlusPlusParser;
 
-// Run commands:
-// 1. export CLASSPATH=".:/usr/local/lib/antlr-4.7.2-complete.jar:$CLASSPATH"
-// 2. antlr4 SimplerPlusPlusLexer.g4
-// 3. antlr4 SimplerPlusPlusParse.g4
-// 4. javac SimplerPlusPlus*.java
-// 5. grun SimplerPlusPlus compilationUnit -gui
-
 options { tokenVocab=SimplerPlusPlusLexer; }
 
 // A sequence of statements read from file
@@ -16,13 +9,13 @@ root
 
 // statement
 statement
-    : if_condition  #if_condition_label
-    | while_loop    #while_loop_label
-    | for_loop      #for_loop_label
-    | def_function  #def_function_label
-    | declaration_list   #declaration_label
-    | call_expression  SEMI_COLON  #call_expression_label
-    | jump          #jump_label
+    : if_condition
+    | while_loop
+    | for_loop
+    | def_function
+    | declaration_list
+    | call_expression  SEMI_COLON
+    | jump
     ;
 
 block_of_code
