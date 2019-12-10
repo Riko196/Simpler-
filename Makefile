@@ -5,19 +5,22 @@ CLASSPATH=.:/usr/local/lib/antlr-4.7.2-complete.jar:$CLASSPATH
 GRAMMAR_FILE=src/main/java/com/grammar
 VISITOR_FILE=src/main/java/com/visitor
 
+default: clean install grammar run
+
 grammar:
 	mv $(GRAMMAR_FILE)/*.g4 $(VISITOR_FILE); \
 	$(ANTLR) -visitor -no-listener $(VISITOR_FILE)/SimplerPlusPlusLexer.g4; \
 	$(ANTLR) -visitor -no-listener $(VISITOR_FILE)/SimplerPlusPlusParser.g4; \
 	mv $(VISITOR_FILE)/*.g4 $(GRAMMAR_FILE);
+	sed -i '1s/^/package com.visitor;\n /' $(VISITOR_FILE)/SimplerPlusPlusLexer*.java
+	sed -i '1s/^/package com.visitor;\n /' $(VISITOR_FILE)/SimplerPlusPlusParser*.java
 
 install:
 	mvn package
 
 clean:
-	rm $(VISITOR_FILE)/*.java; \
-	rm $(VISITOR_FILE)/*.tokens; \
-	rm $(VISITOR_FILE)/*.interp;
+	rm $(VISITOR_FILE)/SimplerPlusPlusLexer*; \
+	rm $(VISITOR_FILE)/SimplerPlusPlusParser*;
 
 grun:
 	grun SimplerPlusPlus compilationUnit -gui
