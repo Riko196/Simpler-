@@ -5,9 +5,9 @@ CLASSPATH=.:/usr/local/lib/antlr-4.7.2-complete.jar:$CLASSPATH
 GRAMMAR_FILE=src/main/java/com/grammar
 VISITOR_FILE=src/main/java/com/visitor
 
-default: clean install grammar run
+default: grammar-visitor install run
 
-grammar:
+grammar-visitor:
 	mv $(GRAMMAR_FILE)/*.g4 $(VISITOR_FILE); \
 	$(ANTLR) -visitor -no-listener $(VISITOR_FILE)/SimplerPlusPlusLexer.g4; \
 	$(ANTLR) -visitor -no-listener $(VISITOR_FILE)/SimplerPlusPlusParser.g4; \
