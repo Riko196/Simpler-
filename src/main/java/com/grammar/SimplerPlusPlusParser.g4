@@ -4,15 +4,19 @@ options { tokenVocab=SimplerPlusPlusLexer; }
 
 // A sequence of statements read from file
 root
-    : statement* EOF
+    : functions EOF
+    ;
+
+// funtions + main
+functions
+    : def_function+
     ;
 
 // statement
 statement
-    : if_condition
+    : condition
     | while_loop
     | for_loop
-    | def_function
     | declaration_list
     | call_expression  SEMI_COLON
     | jump
@@ -23,31 +27,35 @@ block_of_code
     ;
 
 // declaration
-declaration_list
-    : init_declaration (COMMA init_declaration)* SEMI_COLON
-    ;
-
-init_declaration
-    : CONST? variable_types? declaration
-    ;
-
 declaration
+    : declaration_variable
+    | declaration_existing_variable
+    | declaration_array
+    | declaration_existing_array
+    ;
+
+declaration_list
+    : declaration (COMMA declaration)* SEMI_COLON
+    ;
+
+declaration_variable
+    : variable_types NAME ASSIGN value_declaration
+    ;
+
+declaration_array
+    : variable_types NAME (OPEN_BRACKET expression CLOSE_BRACKET)+
+    ;
+
+declaration_existing_variable
     : NAME ASSIGN value_declaration
-    | NAME (OPEN_BRACKET CLOSE_BRACKET)+ ASSIGN more_dimension_value_declaration
-    | NAME (OPEN_BRACKET expression CLOSE_BRACKET)+ (ASSIGN value_declaration)?
+    ;
+
+declaration_existing_array
+    : NAME (OPEN_BRACKET expression CLOSE_BRACKET)+ ASSIGN value_declaration
     ;
 
 value_declaration
-    : expression (QUERT expression COLON expression)?
-    ;
-
-more_dimension_value_declaration
-    : OPEN_BRACE more_dimension_value (COMMA more_dimension_value)* CLOSE_BRACE
-    ;
-
-more_dimension_value
-    : more_dimension_value_declaration
-    | expression
+    : expression
     ;
 
 // Expressions
@@ -56,82 +64,60 @@ expression
     ;
 
 compared_expression
-    : compared_expression EQUALS compared_expression
-    | compared_expression LESS_THAN compared_expression
-    | compared_expression GREATER_THAN compared_expression
-    | compared_expression LT_EQ compared_expression
-    | compared_expression GT_EQ compared_expression
-    | compared_expression NOT_EQ compared_expression
+    : compared_expression op=(EQUALS|LESS_THAN|GREATER_THAN|LT_EQ|GT_EQ|NOT_EQ) compared_expression
     | binary_expression
     ;
 
 binary_expression
-    : binary_expression BIN_OR binary_expression
-    | binary_expression BIN_AND binary_expression
-    | binary_expression BIN_XOR binary_expression
-    | logical_expression
-    ;
-
-logical_expression
-    : logical_expression LOG_AND logical_expression
-    | logical_expression LOG_OR logical_expression
+    : binary_expression op=(BIN_OR|BIN_AND|BIN_XOR|LOG_OR|LOG_AND) binary_expression
     | math_expression
     ;
 
 math_expression
-    : math_expression ADD math_expression
-    | math_expression MINUS math_expression
-    | math_expression STAR math_expression
-    | math_expression DIV math_expression
-    | math_expression MOD math_expression
-    | math_expression POWER math_expression
+    : math_expression op=(STAR|DIV|MOD) math_expression
+    | math_expression op=(ADD|MINUS) math_expression
     | shift_expression
     ;
 
 shift_expression
-    : shift_expression LEFT_SHIFT shift_expression
-    | shift_expression RIGHT_SHIFT shift_expression
+    : shift_expression op=(LEFT_SHIFT|RIGHT_SHIFT) shift_expression
     | unary_expression
     ;
 
 unary_expression
-    : ADD unary_expression
-    | MINUS unary_expression
-    | LOG_NOT unary_expression
-    | TILDE unary_expression
+    : op=(ADD|MINUS|TILDE|LOG_NOT) unary_expression
     | call_expression
     | value
     ;
 
 call_expression
-    : NAME OPEN_PAREN given_parameters? CLOSE_PAREN
-    | ASSERT expression
-    | identifier_expression
+    : NAME OPEN_PAREN (expression (COMMA expression)*)? CLOSE_PAREN
+    | call_array
+    | call_variable
+    | deep_expression
     ;
 
-identifier_expression
+call_array
+    : NAME (OPEN_BRACKET expression CLOSE_BRACKET)+
+    ;
+
+call_variable
     : NAME
-    | NAME (OPEN_BRACKET expression CLOSE_BRACKET)+
-    | OPEN_PAREN expression CLOSE_PAREN
+    ;
+
+deep_expression
+    : OPEN_PAREN expression CLOSE_PAREN
     ;
 
 value
-    : number
-    | STRING_VALUE+
-    | NULL
+    : integer
+    | boolean_value
+    | STRING_VALUE
     ;
 
 // if condition
-if_condition
-    : IF expression block_of_code elif_condition* else_condition?
-    ;
-
-elif_condition
-    : ELIF expression block_of_code
-    ;
-
-else_condition
-    : ELSE block_of_code
+condition
+    : IF expression block_of_code (ELSE block_of_code)?
     ;
 
 // while loop
@@ -141,18 +127,12 @@ while_loop
 
 // for loop
 for_loop
-    : FOR NAME IN for_condition block_of_code
-    ;
-
-for_condition
-    : OPEN_PAREN expression COMMA  expression COMMA expression CLOSE_PAREN
+    : FOR NAME IN OPEN_PAREN expression COMMA  expression COMMA expression CLOSE_PAREN block_of_code
     ;
 
 // Jump statement
 jump
     : RETURN expression? SEMI_COLON
-    | BREAK SEMI_COLON
-    | CONTINUE SEMI_COLON
     ;
 
 // A definition of function and parameters
@@ -165,11 +145,7 @@ def_parameters
     ;
 
 def_parameter
-    : variable_types(OPEN_BRACKET CLOSE_BRACKET)* NAME
-    ;
-
-given_parameters
-    : expression (COMMA expression)*
+    : variable_types NAME
     ;
 
 // Types of variables
@@ -177,9 +153,6 @@ variable_types
     :   CHAR
     |   BOOLEAN
     |   INT
-    |   LONG
-    |   FLOAT
-    |   DOUBLE
     |   STRING
     ;
 
@@ -189,15 +162,15 @@ function_types
     ;
 
 // Types of numbers
-number
-    : integer
-    | IMAG_NUMBER
-    | FLOAT_NUMBER
-    ;
 
 integer
     : DECIMAL_INTEGER
     | OCT_INTEGER
     | HEX_INTEGER
     | BIN_INTEGER
+    ;
+
+boolean_value
+    : TRUE
+    | FALSE
     ;
