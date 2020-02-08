@@ -1,37 +1,51 @@
-def swap(string[] pole, int a, int b) -> void {
-    string pomoc <- pole[a];
-    pole[a] <- pole[b];
-    pole[b] <- pomoc;
-}
+def main() -> int {
+        int N <- scanf_int();
+        char a <- scanf_char(); // new line
+        char pole[N][256]; // 256 velkost kazdeho retazca
 
-def partition(string[] pole, int low, int high) -> int {
-    int i <- low - 1;
-    int pivot <- pole[high];
-    for j in (low , high, 1) {
-        if (pole[j] <= pivot) {
-            i <- (i+1);
-            swap(pole, i, j);
+        for i in (0, N - 1, 1) {
+            char character <- " ";
+            for j in (0, 255, 1) {
+                if (character != "\n") {
+                    character <- scanf_char();
+                    pole[i][j] <- character;
+                }
+            }
         }
+
+        for i in (0, N - 1, 1) {
+            for j in (1, N - 1 - i, 1) {
+                int cmp <- 0;
+                for k in (0, 255, 1) {
+                    if (cmp = 0) {
+                        if (pole[j][k] < pole[j - 1][k]) {
+                            cmp <- 1;
+                        }
+
+                        if (pole[j][k] > pole[j - 1][k]) {
+                            cmp <- -1;
+                        }
+                    }
+                }
+
+                if (cmp = 1) {
+                    for k in (0, 255, 1) {
+                        char tmp <- pole[j][k];
+                        pole[j][k] <- pole[j - 1][k];
+                        pole[j - 1][k] <- tmp;
+                    }
+                }
+            }
+        }
+
+        for i in (0, N - 1, 1) {
+            int j <- 0;
+            while (pole[i][j] != "\n")
+                print_char(pole[i][j]);
+                j <- j + 1;
+            }
+            println();
+        }
+
+        return 0;
     }
-    swap(pole, i + 1, high);
-    return i + 1;
-}
-
-def quickSort(string[] pole, int low, int high) -> void {
-    if (low < high) {
-        int pi <- partition(pole, low, high);
-        quickSort(pole, low, pi-1);
-        quickSort(pole, pi+1, high);
-    }
-}
-
-int N <- input();
-string pole[N];
-
-for i in (0, N, 1) {
-    pole[i] <- input();
-}
-
-for i in (0, N, 1) {
-    println(pole[i]);
-}

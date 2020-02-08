@@ -1,42 +1,46 @@
 def min(int a, int b) -> int {
-    if (a > b) {
-        return b;
-    } else {
-        return a;
+        if (a > b) {
+            return b;
+        } else {
+            return a;
+        }
     }
-}
+    def main(int a) -> int {
+        int N <- scanf_int();
+        int matica[N][N];
+        for i in (0, N - 1, 1) {
+            for j in (0, N - 1, 1) {
+                matica[i][j] <- scanf_int();
+            }
+        }
 
-def floydWarshall(int [][] matica, int N) -> void {
-    for k in (0, N, 1) {
-        for i in (0, N, 1) {
-            for j in (0, N, 1) {
-                if (matica[i][k] = -1 or matica[k][j] = -1) {
-                    continue;
-                } else {
-                    if (matica[i][j] = -1) {
-                        matica[i][j] <- matica[i][k] + matica[k][j];
-                    } else {
-                        matica[i][j] <- min(matica[i][j], matica[i][k] + matica[k][j]);
+        for k in (0, N - 1, 1) {
+            for i in (0, N - 1, 1) {
+                for j in (0, N - 1, 1) {
+                    if (matica[i][k] != -1) {
+                        if (matica[k][j] != -1) {
+                            if (matica[i][j] = -1) {
+                                matica[i][j] <- matica[i][k] + matica[k][j];
+                            } else {
+                                matica[i][j] <- min(matica[i][j], matica[i][k] + matica[k][j]);
+                            }
+                        }
                     }
                 }
             }
         }
-    }
-}
-int N <- input();
-int matica[N][N];
-for i in (0, N, 1) {
-    for j in (0, N, 1) {
-        matica[i][j] <- input();
-    }
-}
-floydWarshall(matica, N);
-for i in (0, N, 1) {
-    for j in (0, N, 1) {
-        if (not (j = N - 1)) {
-            print(matica[i][j] + " ");
-        } else {
-            println(matica[i][j]);
+
+        for i in (0, N - 1, 1) {
+            for j in (0, N - 1, 1) {
+                if (j != N - 1) {
+                    print_int(matica[i][j]);
+                    print_char(" ");
+                } else {
+                    print_int(matica[i][j]);
+                    println();
+                }
+            }
         }
+
+        return 0;
     }
-}

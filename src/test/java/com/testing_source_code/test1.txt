@@ -1,9 +1,13 @@
-int N <- input();
-int pole[N];
-int maximum <- 0; // predpokladame, ze N je aspon 1
-for i in (1, N, 1) {
-    if (pole[maximum] < pole[i]) {
-        maximum <- i;
+def main() -> int {
+    int N <- scanf_int();
+    int pole[N];
+    int maximum <- 0; // predpokladame, ze N je aspon 1
+    for i in (0, N - 1, 1) {
+        if (pole[maximum] < pole[i]) {
+            maximum <- i;
+        }
     }
+    print_int(pole[maximum]);
+    println();
+    return 0;
 }
-println(pole[maximum]);
