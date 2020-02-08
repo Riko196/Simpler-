@@ -17,6 +17,12 @@ public interface SimplerPlusPlusParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitRoot(SimplerPlusPlusParser.RootContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#functions}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctions(SimplerPlusPlusParser.FunctionsContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -29,41 +35,47 @@ public interface SimplerPlusPlusParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBlock_of_code(SimplerPlusPlusParser.Block_of_codeContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#declaration_list}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDeclaration_list(SimplerPlusPlusParser.Declaration_listContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#init_declaration}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitInit_declaration(SimplerPlusPlusParser.Init_declarationContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#declaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitDeclaration(SimplerPlusPlusParser.DeclarationContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#declaration_list}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclaration_list(SimplerPlusPlusParser.Declaration_listContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#declaration_variable}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclaration_variable(SimplerPlusPlusParser.Declaration_variableContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#declaration_array}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclaration_array(SimplerPlusPlusParser.Declaration_arrayContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#declaration_existing_variable}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclaration_existing_variable(SimplerPlusPlusParser.Declaration_existing_variableContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#declaration_existing_array}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclaration_existing_array(SimplerPlusPlusParser.Declaration_existing_arrayContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#value_declaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitValue_declaration(SimplerPlusPlusParser.Value_declarationContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#more_dimension_value_declaration}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMore_dimension_value_declaration(SimplerPlusPlusParser.More_dimension_value_declarationContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#more_dimension_value}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMore_dimension_value(SimplerPlusPlusParser.More_dimension_valueContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#expression}.
 	 * @param ctx the parse tree
@@ -82,12 +94,6 @@ public interface SimplerPlusPlusParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBinary_expression(SimplerPlusPlusParser.Binary_expressionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#logical_expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLogical_expression(SimplerPlusPlusParser.Logical_expressionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#math_expression}.
 	 * @param ctx the parse tree
@@ -113,11 +119,23 @@ public interface SimplerPlusPlusParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCall_expression(SimplerPlusPlusParser.Call_expressionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#identifier_expression}.
+	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#call_array}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIdentifier_expression(SimplerPlusPlusParser.Identifier_expressionContext ctx);
+	T visitCall_array(SimplerPlusPlusParser.Call_arrayContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#call_variable}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCall_variable(SimplerPlusPlusParser.Call_variableContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#deep_expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeep_expression(SimplerPlusPlusParser.Deep_expressionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#value}.
 	 * @param ctx the parse tree
@@ -125,23 +143,11 @@ public interface SimplerPlusPlusParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitValue(SimplerPlusPlusParser.ValueContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#if_condition}.
+	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#condition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIf_condition(SimplerPlusPlusParser.If_conditionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#elif_condition}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitElif_condition(SimplerPlusPlusParser.Elif_conditionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#else_condition}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitElse_condition(SimplerPlusPlusParser.Else_conditionContext ctx);
+	T visitCondition(SimplerPlusPlusParser.ConditionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#while_loop}.
 	 * @param ctx the parse tree
@@ -154,12 +160,6 @@ public interface SimplerPlusPlusParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFor_loop(SimplerPlusPlusParser.For_loopContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#for_condition}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFor_condition(SimplerPlusPlusParser.For_conditionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#jump}.
 	 * @param ctx the parse tree
@@ -185,12 +185,6 @@ public interface SimplerPlusPlusParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDef_parameter(SimplerPlusPlusParser.Def_parameterContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#given_parameters}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitGiven_parameters(SimplerPlusPlusParser.Given_parametersContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#variable_types}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -203,15 +197,15 @@ public interface SimplerPlusPlusParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFunction_types(SimplerPlusPlusParser.Function_typesContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#number}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNumber(SimplerPlusPlusParser.NumberContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#integer}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitInteger(SimplerPlusPlusParser.IntegerContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SimplerPlusPlusParser#boolean_value}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolean_value(SimplerPlusPlusParser.Boolean_valueContext ctx);
 }
