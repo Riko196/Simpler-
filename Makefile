@@ -27,3 +27,8 @@ grun:
 
 run:
 	mvn exec:java -Dexec.mainClass=$(FILE_PATH)
+
+run_llvm:
+	gcc -fPIC -shared -o library.so ./src/main/java/com/utils/library.c
+	llvm-as-9 ./src/main/java/com/simplerplusplus/llvm_output.ll
+	lli-9 -load=./library.so ./src/main/java/com/simplerplusplus/llvm_output.bc
