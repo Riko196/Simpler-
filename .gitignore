@@ -4,7 +4,12 @@
 /target
 /bin
 /src/main/java/com/grammar/.antlr
-
+/src/main/java/com/grammar/*.java
+*.class
+*.tokens
+*.interp
+*.bc
+*.so
 # misc
 .env
 .DS_Store
