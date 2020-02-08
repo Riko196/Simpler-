@@ -1,0 +1,14 @@
+group init;
+
+// list_of_functions for my compiled program
+init(list_of_functions) ::= <<
+declare i32 @print_int(i32)
+declare i32 @scanf_int()
+declare i32 @print_char(i8)
+declare i8  @scanf_char()
+declare i32 @println()
+declare i8* @malloc(i32)
+
+<list_of_functions>
+
+>>

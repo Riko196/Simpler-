@@ -1,0 +1,12 @@
+group call_expression;
+
+// call expression template compiled into the LLVM
+call_variable(register_name, variable_type, variable_name) ::= <<
+    <register_name> = load <variable_type>, <variable_type>* <variable_name>
+
+>>
+
+call_value(register_name, register_type, value) ::= <<
+    <register_name> = add <register_type> <value>, 0
+
+>>

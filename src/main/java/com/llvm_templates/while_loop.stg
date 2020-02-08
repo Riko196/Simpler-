@@ -1,0 +1,17 @@
+group while_loop;
+
+// while loop template compiled into the LLVM
+while_loop(evaluated_condition, cycle_end_register, block_of_code, label_id) ::= <<
+    br label %while_cycle_condition<label_id>
+
+while_cycle_condition<label_id>:
+<evaluated_condition>
+    br i1 <cycle_end_register>, label %while_cycle_body<label_id>, label %end_while_cycle<label_id>
+
+while_cycle_body<label_id>:
+<block_of_code>
+    br label %while_cycle_condition<label_id>
+
+end_while_cycle<label_id>:
+
+>>

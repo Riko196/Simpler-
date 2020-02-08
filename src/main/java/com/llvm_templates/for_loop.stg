@@ -1,0 +1,29 @@
+group FOR_LOOP;
+
+// for loop template compiled into the LLVM
+for_loop(i_memory_register, i_value_register, i_new_value_register, condition_value_register, aux_register, lower, upper, iter, lower_value_register, upper_value_register, iter_value_register, block_of_code, label_id) ::= <<
+<lower>
+<upper>
+<iter>
+    <i_memory_register> = alloca i32
+    store i32 <lower_value_register>, i32* <i_memory_register>
+    br label %for_cycle_condition<label_id>
+
+for_cycle_condition<label_id>:
+    <i_value_register> = load i32, i32* <i_memory_register>
+    <condition_value_register> = icmp sgt i32 <i_value_register>, <upper_value_register>
+    br i1 <condition_value_register>, label %end_for_cycle<label_id>, label %for_cycle_body<label_id>
+
+for_cycle_body<label_id>:
+<block_of_code>
+    br label %for_cycle_iter<label_id>
+
+for_cycle_iter<label_id>:
+    <i_new_value_register> = load i32, i32* <i_memory_register>
+    <aux_register> = add i32 <i_value_register>, <iter_value_register>
+    store i32 <aux_register>, i32* <i_memory_register>
+    br label %for_cycle_condition<label_id>
+
+end_for_cycle<label_id>:
+
+>>

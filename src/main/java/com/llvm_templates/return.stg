@@ -1,0 +1,12 @@
+group return;
+
+// return template compiled into the LLVM
+return(evaluated_expression, type, result) ::= <<
+<if(evaluated_expression)>
+<evaluated_expression>
+    ret <type> <result>
+<else>
+    ret void
+<endif>
+
+>>

@@ -1,0 +1,17 @@
+group declaration;
+
+// declaration of some variable or array
+declaration_variable(llvm_variable_name, type, value_computing, value_register_type, value_register_name) ::= <<
+<value_computing>
+<if(llvm_variable_name)>
+    <llvm_variable_name> = alloca <type>
+<endif>
+    store <value_register_type> <value_register_name>, <value_register_type>* <llvm_variable_name>
+
+>>
+
+declaration_existing_variable(llvm_variable_name, type, value_computing, value_register_type, value_register_name) ::= <<
+<value_computing>
+    store <value_register_type> <value_register_name>, <value_register_type>* <llvm_variable_name>
+
+>>

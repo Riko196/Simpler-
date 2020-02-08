@@ -1,0 +1,22 @@
+group condition;
+
+// condition
+condition(evaluated_condition, evaluated_condition_register, if_block_of_code, else_block_of_code, label_id) ::= <<
+<evaluated_condition>
+<if(else_block_of_code)>
+    br i1 <evaluated_condition_register>, label %if_true<label_id>, label %if_false<label_id>
+<else>
+    br i1 <evaluated_condition_register>, label %if_true<label_id>, label %end_if<label_id>
+<endif>
+
+if_true<label_id>:
+<if_block_of_code>
+    br label %end_if<label_id>
+<if(else_block_of_code)>
+if_false<label_id>:
+<else_block_of_code>
+    br label %end_if<label_id>
+<endif>
+end_if<label_id>:
+
+>>

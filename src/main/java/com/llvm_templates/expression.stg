@@ -1,0 +1,15 @@
+group expression;
+
+// expression template compiled into the LLVM
+binary_operation(operand1, operand2, resultName, instruction, resultType, operand1_register_name, operand2_register_name) ::= <<
+<operand1>
+<operand2>
+    <resultName> = <instruction> <resultType> <operand1_register_name>, <operand2_register_name>
+
+>>
+
+unary_operation(operand, resultName, instruction, resultType, operand_register_name) ::= <<
+<operand>
+    <resultName> = <instruction> <resultType> <operand_register_name>, -1
+
+>>
