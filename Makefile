@@ -5,7 +5,7 @@ CLASSPATH=.:/usr/local/lib/antlr-4.7.2-complete.jar:$CLASSPATH
 GRAMMAR_FILE=src/main/java/com/grammar
 VISITOR_FILE=src/main/java/com/visitor
 
-default: grammar-visitor install run
+default: grammar-visitor install
 
 grammar-visitor:
 	mv $(GRAMMAR_FILE)/*.g4 $(VISITOR_FILE); \
