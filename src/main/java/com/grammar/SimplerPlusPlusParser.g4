@@ -145,7 +145,7 @@ def_parameters
     ;
 
 def_parameter
-    : variable_types NAME
+    : variable_types NAME (OPEN_BRACKET CLOSE_BRACKET)+
     ;
 
 // Types of variables

@@ -123,8 +123,14 @@ public class SimplerPlusPlusVisitor extends SimplerPlusPlusParserBaseVisitor<Cod
         List<String> keys = new ArrayList<>(this.currentMethod.liveVariables.keySet());
         for (int i = 0; i < keys.size(); i++) {
             String key = keys.get(i);
-            if (this.currentMethod.liveVariables.get(key).depth > this.depth)
+            Variable variable = this.currentMethod.liveVariables.get(key);
+            if (variable.depth > this.depth) {
+                if (variable.sizeOfDimensions.size() != 0) {
+                    result.addCode("call i8 @free(" + variable.type + " " + variable.name + ")\n");
+                }
                 this.currentMethod.liveVariables.remove(key);
+            }
+
         }
 
         return result;
@@ -509,6 +515,8 @@ public class SimplerPlusPlusVisitor extends SimplerPlusPlusParserBaseVisitor<Cod
     private CodeFragment getArrayAddress(String name, List<CodeFragment> expressions) {
         Variable array = this.currentMethod.liveVariables.get(name);
         if (array == null)
+            array = this.currentMethod.parameters.get(name);
+        if (array == null)
             throw new Error("Array '" + name + "' does not exist");
         String llvmCode = "";
 
@@ -776,6 +784,7 @@ public class SimplerPlusPlusVisitor extends SimplerPlusPlusParserBaseVisitor<Cod
     @Override
     public CodeFragment visitDef_parameter(SimplerPlusPlusParser.Def_parameterContext ctx) {
         String name = ctx.NAME().getText();
+        int sizeOfDimensions = ctx.OPEN_BRACKET().size();
         String variable_type = visit(ctx.variable_types()).toString();
 
         Variable parameter = new Variable(variable_type, "%" + name, this.depth);
